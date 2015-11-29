@@ -1,4 +1,4 @@
-Create the webapp
-	POST page to update a single page
-	POST page to start spidering
-	
+Check for redirection
+    Store under the redirected URL
+    Add both urls to the processed list
+

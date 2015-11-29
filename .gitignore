@@ -1,0 +1,10 @@
+*~
+*.class
+/.project
+/.settings
+/.gradle
+/.classpath
+/bin
+/build
+/exampleIndex
+
