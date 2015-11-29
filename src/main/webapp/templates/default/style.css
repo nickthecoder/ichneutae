@@ -1,0 +1,77 @@
+/* Fonts */
+#logo { font-family: 'Arvo', serif; font-size : 24px; letter-spacing: -1px; font-weight: bold; }
+#main { font-family: Vedana, sans; font-size: 14px; }
+p { line-height: 150%; }
+h1, h2, h3, h4 { font-family: 'Arvo', serif; font-weight: normal; }
+h1 { font-size: 28px; font-weight: bold; }
+h2 { font-size: 24px; font-weight: normal; }
+h3 { font-size: 18px; font-weight: normal; }
+
+/* Layout */
+
+#whole { width: 980px; margin: 0 auto; }
+#header { text-align: center; }
+#logo { margin: 2em 0; }
+#logo p { margin: 0; padding: 0; }
+
+#main { margin: 1em 0; }
+#full #content { width: 800px; padding: 50px 2em;}
+
+#belowColumns { clear: both; }
+#footer { text-align: center; padding: 1em; }
+#search { border: 1px solid #333; float: right; }
+#search { padding: 4px 0 4px 0.5em; }
+#searchText { border: 0; background: #000; color: #eee; }
+#searchSubmit { border: 0px; background: none; }
+
+/* Tags */
+
+h1, h2, h3, h4 { margin: 0; padding: 0;  }
+h1 { margin: 0 0 1em 0; }
+h2 { margin: 1em 0; }
+h2 { margin-bottom: 20px; padding: 0 0 12px 0; }
+h3 { margin: 2em 0 1em 0; }
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+hr { border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); }
+
+/* Class Styles */
+
+/* Colors */
+
+body { background: #000; color: #fff; }
+a { color: #e44; }
+#main { background: #fff; color: #222; border: 1px solid #bbb; border-radius: 2px; }
+td { color: #222;  }
+th { background: #ddd; color: #333; }
+#logo a { color: #fff; text-decoration: none; }
+
+h2 { border-bottom: 1px solid #bbb; }
+ul li:before{ color: #aaa; }
+
+.mainBox { border: 1px solid #444; padding: 1em; background: #f8f8f8; }
+.mainBox .ww_boxTitle { font-size: 16pt; background: #888; color: #000; padding: 0.5em; border: 1px solid #eee; }
+
+@media (max-width: 1000px) {
+  #whole { width: 100%; }
+  #content { float: none; width: inherit; margin-left: 2em; margin-right: 2em; }
+  #navigation { float: none; width: inherit; margin-top: 2em; }
+  #navigation ul { line-height: 200%; }
+  #navigation ul li { display: inline; padding: 0 1em 0 0; }
+  #navigation ul li:before{ padding: 0; content: ""; }
+}
+
+/* Search Results */
+
+.searchResult h3 { margin: 0 }
+.searchResult p { margin: 0 0 1em 0; }
+#searchResults .url a { color: #080; font-size: 80%; }
+#largeSearchBox { width: 90%; }
+#searchForm { text-align: center; }
+
+.pager { text-align: center; margin-top: 3em; } 
+.pager a { padding: 0.5em; }
+.pager .currentPage { border: 1px solid #888; padding: 3px; border-radius: 4px; }
+.pager a:hover{ background: #e44; border-radius: 4px; color: #fff; text-decoration: none; }
