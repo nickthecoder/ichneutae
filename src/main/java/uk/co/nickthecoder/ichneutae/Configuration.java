@@ -16,12 +16,12 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.store.Directory;
 
-import uk.co.nickthecoder.ichneutae.filter.AndFilter;
-import uk.co.nickthecoder.ichneutae.filter.FalseFilter;
-import uk.co.nickthecoder.ichneutae.filter.Filter;
-import uk.co.nickthecoder.ichneutae.filter.URLFilter;
-import uk.co.nickthecoder.ichneutae.filter.URLHostFilter;
-import uk.co.nickthecoder.ichneutae.filter.URLPathFilter;
+import uk.co.nickthecoder.webwidgets.filter.AndFilter;
+import uk.co.nickthecoder.webwidgets.filter.FalseFilter;
+import uk.co.nickthecoder.webwidgets.filter.Filter;
+import uk.co.nickthecoder.webwidgets.filter.URLFilter;
+import uk.co.nickthecoder.webwidgets.filter.URLHostFilter;
+import uk.co.nickthecoder.webwidgets.filter.URLPathFilter;
 
 /**
  * Holds configuration information in static fields. The configuration can be

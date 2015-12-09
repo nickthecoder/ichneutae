@@ -2,8 +2,8 @@ package uk.co.nickthecoder.ichneutae;
 
 import java.net.URL;
 
-import uk.co.nickthecoder.ichneutae.filter.FalseFilter;
-import uk.co.nickthecoder.ichneutae.filter.Filter;
+import uk.co.nickthecoder.webwidgets.filter.FalseFilter;
+import uk.co.nickthecoder.webwidgets.filter.Filter;
 
 public class Category
 {
