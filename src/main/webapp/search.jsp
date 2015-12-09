@@ -43,15 +43,11 @@
             <h3><a href="<c:out value="${hit.URLString}" />"><c:out value="${hit.title}" /></a></h3>
             <div class="url"><a href="<c:out value="${hit.URLString}" />"><c:out value="${hit.URLString}"/></a></div>
             <p>
-                <c:forEach var="section" items="${hit.summarySections}"
-                    ><c:choose
-                        ><c:when test="${section.matched}"
-                            ><b><c:out value="${section}"/></b
-                        ></c:when><c:otherwise
-                            ><c:out value="${section}"
-                        /></c:otherwise
-                    ></c:choose
-                ></c:forEach><br/>
+                <c:forEach var="section" items="${hit.summary.sections}">
+                    <c:if test="${section.matched}"><b></c:if>
+                        <c:out value="${section.text}"/>
+                    <c:if test="${section.matched}"></b></c:if>
+                </c:forEach>
             </p>
         </div>
         </c:forEach>

@@ -8,13 +8,13 @@ import java.nio.file.Paths;
 
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 
 logger.trace( "Configuration begin : exampleConfig.groovy" );
 
 logger.trace( "Configuring Lucene" );
 Configuration.index = new NIOFSDirectory( Paths.get("exampleIndex" ) );
-Configuration.analyzer = new StandardAnalyzer();
+Configuration.analyzer = new EnglishAnalyzer();
 
 Configuration.hitsPerPage=2;
 

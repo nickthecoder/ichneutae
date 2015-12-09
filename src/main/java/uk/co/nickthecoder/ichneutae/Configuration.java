@@ -5,6 +5,8 @@ import groovy.lang.GroovyShell;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.store.Directory;
 
@@ -143,6 +147,35 @@ public class Configuration
         for (String origin : origins) {
             Configuration.origins.add(new URL(origin));
         }
+    }
+
+    public static String analyzeWord(String word)
+    {
+        Reader reader = new StringReader(word);
+        TokenStream tokenStream = null;
+        try {
+            tokenStream = Configuration.analyzer.tokenStream("content", reader);
+            CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+
+            tokenStream.reset();
+            while (tokenStream.incrementToken()) {
+                return charTermAttribute.toString();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to filter a keyword. " + e);
+        } finally {
+            try {
+                if (tokenStream != null) {
+                    tokenStream.end();
+                    tokenStream.close();
+                }
+                reader.close();
+            } catch (Exception e) {
+                // Do nothing
+                logger.error("Failed to close during analyzeWord " + e);
+            }
+        }
+        return null;
     }
 
     /**

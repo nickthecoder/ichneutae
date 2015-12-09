@@ -1,16 +1,11 @@
 package uk.co.nickthecoder.ichneutae.model;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -31,14 +26,14 @@ public class QueryBean
 
     public Query query;
 
-    public List<String> words;
+    public List<String> keywords;
 
     public QueryBean(String queryString, String[] categoryCodes)
     {
         logger.trace("Query string : '" + queryString + "'");
 
         this.queryString = queryString;
-        this.words = new ArrayList<String>();
+        this.keywords = new ArrayList<String>();
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
@@ -60,28 +55,15 @@ public class QueryBean
             }
 
             logger.trace("Query word : '" + word + "'");
-            this.words.add(word);
 
-            Reader reader = new StringReader(word);
-            try {
-                TokenStream tokenStream = Configuration.analyzer.tokenStream("content", reader);
-                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+            String keyword = Configuration.analyzeWord(word);
+            this.keywords.add(keyword);
+            logger.trace("Query term : '" + keyword + "'");
 
-                tokenStream.reset();
-                while (tokenStream.incrementToken()) {
-                    String term = charTermAttribute.toString();
-                    logger.trace("Query term : '" + term + "'");
+            builder.add(new TermQuery(new Term("content", keyword)), occur);
 
-                    builder.add(new TermQuery(new Term("content", term)), occur);
-
-                    if (occur != BooleanClause.Occur.MUST) {
-                        builder.add(new TermQuery(new Term("title", term)), occur);
-                    }
-                }
-                tokenStream.end();
-                tokenStream.close();
-            } catch (IOException e) {
-                logger.error("Failed to tokenise word : " + word);
+            if (occur != BooleanClause.Occur.MUST) {
+                builder.add(new TermQuery(new Term("title", keyword)), occur);
             }
         }
 
