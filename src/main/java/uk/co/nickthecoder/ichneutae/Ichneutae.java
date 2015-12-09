@@ -3,18 +3,21 @@ package uk.co.nickthecoder.ichneutae;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
@@ -134,14 +137,19 @@ public class Ichneutae
 
         try {
 
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpGet httpget = new HttpGet(url.toString());
-            CloseableHttpResponse response = httpclient.execute(httpget);
+            HttpGet httpGet = new HttpGet(url.toString());
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpClientContext context = HttpClientContext.create();
+            httpClient.execute(httpGet, context);
+            List<URI> redirectURIs = context.getRedirectLocations();
+            if (redirectURIs != null && !redirectURIs.isEmpty()) {
+                url = redirectURIs.get(redirectURIs.size() - 1).toURL();
+                this.processed.add( url );
+            }
+
+            CloseableHttpResponse response = httpClient.execute(httpGet);
             try {
                 HttpEntity entity = response.getEntity();
-                // TODO Check for a redirection, and use the new URL in all
-                // future calls.
-                // TODO Add the new URL to this.processed too.
                 if (entity == null) {
                     logger.error("No Entity for " + url);
                 } else {

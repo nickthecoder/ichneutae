@@ -67,12 +67,7 @@ public class HitBean
         return this.document.getValues("category");
     }
 
-    /*
-     * public Iterator getMatchingCategories() { return
-     * Configuration.instance().getCategories().findCategories( getURLString()
-     * ); }
-     */
-    public String getSummary()
+    private String getSummary()
     {
         if (summary == null) {
             summary = createSummary();
@@ -85,7 +80,7 @@ public class HitBean
         return "URL: " + this.getURLString() + "\nTitle: " + this.getTitle() + "\nSummary: " + this.getSummary();
     }
     
-    protected String createSummary()
+    private String createSummary()
     {
         // System.out.println( "Summary section for : " + getContent() );
 
@@ -136,7 +131,7 @@ public class HitBean
         return result.toString();
     }
 
-    protected SummarySection createSummarySection(String content, String word, int matchIndex)
+    private SummarySection createSummarySection(String content, String word, int matchIndex)
     {
         int start = walkBackwards(content, matchIndex);
         int end = walkForwards(content, matchIndex + word.length());
@@ -144,7 +139,7 @@ public class HitBean
         return new SummarySection(content, start, end);
     }
 
-    protected int walkBackwards(String text, int matchIndex)
+    private int walkBackwards(String text, int matchIndex)
     {
         if (matchIndex <= 1) {
             return 0;
@@ -203,7 +198,7 @@ public class HitBean
         return 0;
     }
 
-    protected int walkForwards(String text, int matchIndex)
+    private int walkForwards(String text, int matchIndex)
     {
         int end = text.length();
         if (matchIndex >= end - 1) {
