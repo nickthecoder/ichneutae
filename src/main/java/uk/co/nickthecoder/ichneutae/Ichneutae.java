@@ -87,7 +87,12 @@ public class Ichneutae
                         URL url = i.next();
                         i.remove();
                         this.processed.add(url);
-                        process(url);
+                        try {
+                            process(url);
+                        } catch (Exception e) {
+                            logger.warn("Failed to process a page");
+                            logger.warn(url);
+                        }
                     } catch (ConcurrentModificationException e) {
                         // Break - The while loop will kick in and a new
                         // Iterator object will be created.
@@ -109,7 +114,7 @@ public class Ichneutae
 
     }
 
-    public void index(URL url) throws IOException
+    public void index(URL url) throws Exception
     {
         logger.trace("(Re-)indexing " + url);
 
@@ -127,7 +132,7 @@ public class Ichneutae
 
     }
 
-    private void process(URL url)
+    private void process(URL url) throws Exception
     {
         logger.trace("Process " + url);
 
@@ -135,54 +140,49 @@ public class Ichneutae
             return;
         }
 
+        HttpGet httpGet = new HttpGet(url.toString());
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpClientContext context = HttpClientContext.create();
+        httpClient.execute(httpGet, context);
+        List<URI> redirectURIs = context.getRedirectLocations();
+        if (redirectURIs != null && !redirectURIs.isEmpty()) {
+            url = redirectURIs.get(redirectURIs.size() - 1).toURL();
+            this.processed.add(url);
+        }
+
+        CloseableHttpResponse response = httpClient.execute(httpGet);
         try {
-
-            HttpGet httpGet = new HttpGet(url.toString());
-            CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpClientContext context = HttpClientContext.create();
-            httpClient.execute(httpGet, context);
-            List<URI> redirectURIs = context.getRedirectLocations();
-            if (redirectURIs != null && !redirectURIs.isEmpty()) {
-                url = redirectURIs.get(redirectURIs.size() - 1).toURL();
-                this.processed.add( url );
-            }
-
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            try {
-                HttpEntity entity = response.getEntity();
-                if (entity == null) {
-                    logger.error("No Entity for " + url);
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                logger.error("No Entity for " + url);
+            } else {
+                Header contentType = entity.getContentType();
+                if (contentType == null) {
+                    logger.info("No Mime Type for " + url);
                 } else {
-                    Header contentType = entity.getContentType();
-                    if (contentType == null) {
-                        logger.info("No Mime Type for " + url);
+                    String mimeType = contentType.getValue().split(";")[0].trim();
+                    Parser parser = this.parsers.get(mimeType);
+                    if (parser == null) {
+                        logger.info("No Parser for Mime Type " + mimeType + " for " + url);
                     } else {
-                        String mimeType = contentType.getValue().split(";")[0].trim();
-                        Parser parser = this.parsers.get(mimeType);
-                        if (parser == null) {
-                            logger.info("No Parser for Mime Type " + mimeType + " for " + url);
-                        } else {
-                            InputStream in = entity.getContent();
-                            try {
-                                parser.parse(url, in);
-                                store(url, parser);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                logger.error("Failed to read/store " + url);
-                            } finally {
-                                in.close();
-                            }
+                        InputStream in = entity.getContent();
+                        try {
+                            parser.parse(url, in);
+                            store(url, parser);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            logger.error("Failed to read/store " + url);
+                        } finally {
+                            in.close();
                         }
                     }
-
                 }
-            } finally {
-                response.close();
-            }
 
-        } catch (IOException e) {
-            logger.info("Failed to process " + url + " " + e);
+            }
+        } finally {
+            response.close();
         }
+
     }
 
     private void store(URL url, Parser parser) throws IOException
