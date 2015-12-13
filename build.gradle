@@ -51,6 +51,10 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.0'
     compile 'org.apache.struts:struts-tiles:1.3.10'
     compile 'nickthecoder.co.uk:webwidgets-core:0.1'
+    
 }
 
+war {   
+    rootSpec.exclude("**/servlet-api*.jar")
+}
 

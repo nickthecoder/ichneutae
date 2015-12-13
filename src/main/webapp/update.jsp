@@ -12,8 +12,6 @@
 
     <h1>Update</h1>
 
-Message ${message}
-
     <c:if test="${message != null}">
     Yes
         <p>
