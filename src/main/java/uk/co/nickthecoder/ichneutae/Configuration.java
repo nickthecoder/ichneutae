@@ -125,6 +125,7 @@ public class Configuration
      */
     public static void load(String groovyFilename) throws Exception
     {
+        logger.info("Loading configuration file " + groovyFilename );
         InputStream input = new FileInputStream(groovyFilename);
 
         GroovyShell shell = new GroovyShell();
